@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+   Account
+{% endblock  %}
+
+{% block css_files %}
+{% comment %} <script type="text/javascript" src="/static/admin/js/change_form.js"></script> {% endcomment %}
+{% comment %} <script type="text/javascript" src="{% static 'accounts/add-account.js' %}"></script>  {% endcomment %}
+{% endblock  %}
+
+
+{% block content %}
+<div class="container-fluid mt-2 ">
+   <div class="card rounded-4 shadow-lg ms-2 me-2">
+       <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-4 ">
+                <div class="card " >
+                <div class="card-body">
+                
+                <form method="POST" action="">                         
+                    {% csrf_token %}
+
+                    {% for form_field in form %}
+                    <div class="mb-3">
+                        <label for="id_{{ form_field.name }}" class="form-label">{{ form_field.label }}</label>
+                        {% with WIDGET_ERROR_CLASS='border-danger' WIDGET_REQUIRED_CLASS='my_required' %}
+                            {% render_field form_field class+="form-control"%}
+                        {% endwith %}
+                         
+                        {% for error in form_field.errors%}
+                             <div class="alert alert-danger" role="alert">
+                                {{error}}
+                             </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-outline-success">Save</button> 
+                    </div>
+                  </form>
+
+                </div>
+                </div>
+                
+              
+              
+            </div>
+          </div>
+       </div>
+   </div>
+   
+   <script type="text/javascript">
+
+    function string_to_slug (str) {
+        str = str.replace(/^\s+|\s+$/g, ''); // trim
+        str = str.toLowerCase();
+      
+        // remove accents, swap ñ for n, etc
+        var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+        var to   = "aaaaeeeeiiiioooouuuunc------";
+        for (var i=0, l=from.length ; i<l ; i++) {
+            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+        }
+    
+        str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+            .replace(/\s+/g, '-') // collapse whitespace and replace by -
+            .replace(/-+/g, '-'); // collapse dashes
+    
+        return str;
+    }
+
+
+    document.getElementById("id_name").onkeyup = function() {
+        var e = document.getElementById("id_slug");
+        if (!e._changed) { e.value = string_to_slug(document.getElementById("id_name").value); }
+    }
+    </script>
+
+</div>
+{% endblock %}

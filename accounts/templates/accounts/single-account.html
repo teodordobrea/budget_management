@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+   Accounts List
+{% endblock  %}
+
+{% block css_files %}
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Orbitron&family=Source+Code+Pro&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'accounts/credit-card.css' %}">
+{% endblock  %}
+
+{% block content %}
+<div class="container-fluid mt-2 ">
+   <div class="card rounded-4 shadow-lg ms-2 me-2">
+       <div class="card-body">
+        <div class="card " >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                              <a href = "{% url 'single-account-page' account.slug %}">
+                                <div class="credit-card">
+                                    <h3 class="bank">{{ account.curency.abbreviation }}</h3>
+                                    <img src="{% static 'accounts/images/chip.png' %}" class="chip" />
+                                    <img src="{% static 'accounts/images/contactless-indicator.png' %}" class="indicator" />
+                                    <h3 class="number">{{ account.number }}</h3>
+                                    <h5 class="card-holder">
+                                      <span>Card holder</span><br />
+                                      {{ account.name }}
+                                    </h5>
+                                    <h5 class="valid"><span>Amount</span><br />{{ account.amount }}</h5>
+                                    <img src="{% static 'accounts/images/visa.png' %}" class="logo" />
+                                </div>
+                              </a>
+                          </div>
+                          </div>
+                    </div>
+                    <div class="col-md-7">
+                        {% for log in logs %}
+                            {{ log.old_amount }}
+                            {{ log.created_at }}
+                        
+                        {% endfor %}
+                    </div>
+                </div>
+                
+              
+              
+            </div>
+          </div>
+       </div>
+   </div>
+</div>
+{% endblock %}

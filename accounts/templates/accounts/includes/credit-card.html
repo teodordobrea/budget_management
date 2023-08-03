@@ -1,0 +1,19 @@
+{% load static %}
+<div class="row mb-3">
+  <div class="col-md-12">
+    <a href = "{% url 'single-account-page' account.slug %}">
+      <div class="credit-card">
+          <h3 class="bank">{{ account.curency.abbreviation }}</h3>
+          <img src="{% static 'accounts/images/chip.png' %}" class="chip" />
+          <img src="{% static 'accounts/images/contactless-indicator.png' %}" class="indicator" />
+          <h3 class="number">{{ account.number }}</h3>
+          <h5 class="card-holder">
+            <span>Card holder</span><br />
+            {{ account.name }}
+          </h5>
+          <h5 class="valid"><span>Amount</span><br />{{ account.amount }}</h5>
+          <img src="{% static 'accounts/images/visa.png' %}" class="logo" />
+      </div>
+    </a>
+</div>
+</div>
