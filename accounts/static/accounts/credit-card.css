@@ -115,3 +115,11 @@
   right: 1.7vw;
   bottom: 1.5vw;
 }
+
+
+/* @media only screen and (max-width: 768px){
+  .credit-card {
+    width: 80vw;
+  }
+
+} */

@@ -130,7 +130,7 @@ class EditAccountView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        AccountLogs.objects.create(account=self.object, old_amount=self.old_amount, new_amount=self.object.amount, curency=self.object.curency, difference=self.object.amount)
+        AccountLogs.objects.create(account=self.object, old_amount=self.old_amount, new_amount=self.object.amount, curency=self.object.curency, difference=self.object.amount - self.old_amount)
         return HttpResponseRedirect(self.get_success_url())
     
 
@@ -142,9 +142,14 @@ class SingleAccountView(LoginRequiredMixin, DetailView):
         obj = self.get_object()
         context = super().get_context_data(**kwargs)
         logs = obj.account_logs.all()
+        dates = []
+        amounts = []
         for log in logs:
-            log.created_at = str(log.created_at)
+            dates.append(log.created_at.date().day)
+            amounts.append(int(log.new_amount))
         context["logs"] = logs
+        context["dates"] = dates
+        context["amounts"] = amounts
         return context
 
     def dispatch(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
