@@ -10,4 +10,5 @@ urlpatterns = [
     path('accounts/add/', views.AddAccountView.as_view(), name = 'add-account'),
     path("accounts/<slug:slug>", views.SingleAccountView.as_view(), name = "single-account-page"),
     path("accounts/<slug:slug>/edit/", views.EditAccountView.as_view(), name = "edit-account-page"),
+    path("accounts/<slug:slug>/delete/", views.DeleteAccountView.as_view(), name = "delete-account-page"),
 ]

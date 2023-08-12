@@ -7,7 +7,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormView, CreateView, UpdateView
+from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
@@ -91,6 +91,34 @@ class AccountsListView(LoginRequiredMixin, ListView):
 
         return data
     
+
+class SingleAccountView(LoginRequiredMixin, DetailView):
+    login_url = 'login-page'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        logs = obj.account_logs.all()
+        dates = []
+        amounts = []
+        for log in logs:
+            dates.append(log.created_at.date().day)
+            amounts.append(int(log.new_amount))
+        context["logs"] = logs
+        context["dates"] = dates
+        context["amounts"] = amounts
+        return context
+
+    def dispatch(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
+        obj = self.get_object()
+        if request.user != obj.owner:
+            return HttpResponseRedirect("/")
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = "accounts/single-account.html"
+    model = Account
+    
     
 
 class AddAccountView(LoginRequiredMixin, CreateView):
@@ -132,25 +160,11 @@ class EditAccountView(LoginRequiredMixin, UpdateView):
         self.object = form.save()
         AccountLogs.objects.create(account=self.object, old_amount=self.old_amount, new_amount=self.object.amount, curency=self.object.curency, difference=self.object.amount - self.old_amount)
         return HttpResponseRedirect(self.get_success_url())
-    
 
-class SingleAccountView(LoginRequiredMixin, DetailView):
+
+class DeleteAccountView(LoginRequiredMixin, DeleteView):
     login_url = 'login-page'
     redirect_field_name = 'redirect_to'
-
-    def get_context_data(self, **kwargs):
-        obj = self.get_object()
-        context = super().get_context_data(**kwargs)
-        logs = obj.account_logs.all()
-        dates = []
-        amounts = []
-        for log in logs:
-            dates.append(log.created_at.date().day)
-            amounts.append(int(log.new_amount))
-        context["logs"] = logs
-        context["dates"] = dates
-        context["amounts"] = amounts
-        return context
 
     def dispatch(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
         obj = self.get_object()
@@ -158,7 +172,7 @@ class SingleAccountView(LoginRequiredMixin, DetailView):
             return HttpResponseRedirect("/")
         return super().dispatch(request, *args, **kwargs)
 
-    template_name = "accounts/single-account.html"
     model = Account
-
+    template_name = 'accounts/delete-account.html'
+    success_url = reverse_lazy("accounts-list")
 
