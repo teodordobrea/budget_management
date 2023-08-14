@@ -1,0 +1,27 @@
+<div class="card">
+    <div class="card-header">
+    <div class="row justify-content-between">
+        <div class="col-8 text-truncate">Details</div>
+        <div class="col-4 text-end">
+            <button class="btn btn-outline-info py-1" type="button" data-bs-toggle="collapse" data-bs-target="#details_collapse" aria-expanded="true" ></button>
+        </div>
+    </div>
+    
+    </div>
+    <div class="collapse show " id="details_collapse">
+    <div class="card-body">
+        <div class="row">
+        <div class="col-md-3">Name:</div>
+        <div class="col-md-9">{{ account.name }}</div>
+        </div>
+        <div class="row">
+        <div class="col-md-3">Type:</div>
+        <div class="col-md-9">{{ account.type.name }}</div>
+        </div>
+        <div class="row">
+        <div class="col-md-3">Amount:</div>
+        <div class="col-md-9">{{ account.amount }} {{ account.curency.abbreviation }}</div>
+        </div>
+    </div>
+    </div>
+</div>

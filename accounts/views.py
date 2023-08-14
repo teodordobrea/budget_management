@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib import messages
 from django.urls import reverse_lazy
-
+from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CreateUserForm, AccountForm
@@ -92,34 +92,94 @@ class AccountsListView(LoginRequiredMixin, ListView):
         return data
     
 
-class SingleAccountView(LoginRequiredMixin, DetailView):
+# class SingleAccountView(LoginRequiredMixin, DetailView):
+#     login_url = 'login-page'
+#     redirect_field_name = 'redirect_to'
+
+#     def get_context_data(self, **kwargs):
+#         obj = self.get_object()
+#         context = super().get_context_data(**kwargs)
+#         logs = obj.account_logs.all()
+#         dates = []
+#         amounts = []
+#         for log in logs:
+#             dates.append(log.created_at.date().day)
+#             amounts.append(int(log.new_amount))
+#         context["logs"] = logs
+#         context["dates"] = dates
+#         context["amounts"] = amounts
+#         return context
+
+#     def dispatch(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
+#         obj = self.get_object()
+#         if request.user != obj.owner:
+#             return HttpResponseRedirect("/")
+#         return super().dispatch(request, *args, **kwargs)
+
+#     template_name = "accounts/single-account.html"
+#     model = Account
+    
+  #########
+
+class SingleAccountView(LoginRequiredMixin, View):
     login_url = 'login-page'
     redirect_field_name = 'redirect_to'
 
-    def get_context_data(self, **kwargs):
-        obj = self.get_object()
-        context = super().get_context_data(**kwargs)
-        logs = obj.account_logs.all()
+    collapse_dictionary = {
+        "actions_collapse": False,
+        "graph_collapse": False,
+        "logs_collapse": False
+    }
+
+    def is_collapse(self, request):
+        for key in self.collapse_dictionary:
+            collapse = request.session.get(key)
+            if collapse is not None:
+                collapse = collapse
+            else:
+                collapse = False
+            self.collapse_dictionary[key] = collapse
+        
+
+    def get(self,request,slug):
+        account = Account.objects.get(slug=slug)
+        logs = account.account_logs.all()
         dates = []
         amounts = []
         for log in logs:
             dates.append(log.created_at.date().day)
             amounts.append(int(log.new_amount))
-        context["logs"] = logs
-        context["dates"] = dates
-        context["amounts"] = amounts
-        return context
-
-    def dispatch(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
-        obj = self.get_object()
-        if request.user != obj.owner:
+        self.is_collapse(request)
+        context = {
+            "account": account,
+            "logs": logs,
+            "dates": dates,
+            "amounts": amounts,  
+            "actions_collapse": self.collapse_dictionary["actions_collapse"],  
+            "graph_collapse": self.collapse_dictionary["graph_collapse"], 
+            "logs_collapse": self.collapse_dictionary["logs_collapse"],         
+        }
+        if request.user != account.owner:
             return HttpResponseRedirect("/")
-        return super().dispatch(request, *args, **kwargs)
 
-    template_name = "accounts/single-account.html"
-    model = Account
+        return render(request,"accounts/single-account.html",context)
     
-    
+    def post(self,request,slug):  
+        for key in self.collapse_dictionary:
+            if key in request.POST.keys():
+                if request.POST[key] == "False":
+                    collapse = False
+                else:
+                    collapse = True
+                
+                if collapse == False:
+                    collapse = True
+                else:
+                    collapse = False
+
+                request.session[key] = collapse
+        
+        return self.get(request,slug)
 
 class AddAccountView(LoginRequiredMixin, CreateView):
     login_url = 'login-page'

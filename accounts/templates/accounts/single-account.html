@@ -7,69 +7,36 @@
 
 {% block css_files %}
 <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Orbitron&family=Source+Code+Pro&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'accounts/credit-card.css' %}">
 {% endblock  %}
 
 {% block content %}
 <div class="container-fluid mt-2 ">
-   <div class="card rounded-4 shadow-lg ms-2 me-2">
+   <div class="card rounded-4 shadow-lg mx-1">
        <div class="card-body">
-        <div class="row justify-content-end">
-          <div class="col-md-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a class="btn btn-primary" href="{% url 'edit-account-page' account.slug %}">Edit</a>
+
+        <div class="row mb-3">
+          <div class="col-md-7 mb-3">
+            {% include "accounts/includes/detail-card.html" %}
           </div>
-          <div class="col-md-1">
-            <a class="btn btn-danger" href="{% url 'delete-account-page' account.slug %}">Delete</a>
+          <div class="col-md-5">
+            {% include "accounts/includes/actions-card.html" %}
           </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-5">
-              <a href = "{% url 'single-account-page' account.slug %}">
-              <div class="credit-card">
-                  <h3 class="bank">{{ account.curency.abbreviation }}</h3>
-                  <img src="{% static 'accounts/images/chip.png' %}" class="chip" />
-                  <img src="{% static 'accounts/images/contactless-indicator.png' %}" class="indicator" />
-                  <h3 class="number">{{ account.number }}</h3>
-                  <h5 class="card-holder">
-                      <span>Card holder</span><br />
-                      {{ account.name }}
-                  </h5>
-                  <h5 class="valid"><span>Amount</span><br />{{ account.amount }}</h5>
-                  <img src="{% static 'accounts/images/visa.png' %}" class="logo" />
-              </div>
-              </a>
-                    
-            </div>
-            <div class="col-md-7">
-                {% for log in logs %}
-                    {{ log.old_amount }}
-                    {{ log.created_at }}
-                
-                {% endfor %}
-
-                {{amounts}}
-            </div>
-        </div>
-
-        
-
 
         <div class="row">
-            <div class="col-md-5">
-                <div>
-                    <canvas id="myChart"></canvas>
-                  </div>
-            </div>
+          <div class="col-md-7 mb-3">
+            {% include "accounts/includes/graph-card.html" %}
+          </div>
+          <div class="col-md-5">
+            {% include "accounts/includes/logs-card.html" %}
+          </div>
         </div>
-
-
        </div>
    </div>
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
   const ctx = document.getElementById('myChart');
@@ -95,8 +62,9 @@
       }
     }
   });
-
-
 </script>
+
+
+
 
 {% endblock %}

@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row justify-content-between">
+        <div class="col-8 d-flex flex-row"><p class="me-2">Logs</p>
+            <form class="logs_collapse collapse collapse-horizontal {% if logs_collapse %}show{% endif %}" action="{% url 'single-account-page' account.slug %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="{{ logs_collapse }}" name="logs_collapse">
+                <button class="btn btn{% if logs_collapse == False %}-outline{% endif %}-warning py-1" type="submit"  ></button>
+              </form>
+        </div>
+        <div class="col-4 text-end">
+                <button class="btn btn-outline-info py-1" type="button" data-bs-toggle="collapse" data-bs-target=".logs_collapse" aria-expanded="true" ></button>
+        </div>
+        </div>
+        
+    </div>
+    <div class="logs_collapse collapse {% if logs_collapse %}show{% endif %}">
+        <div class="card-body">
+        {% for log in logs %}
+            {{ log.old_amount }}
+            {{ log.created_at }}
+        
+        {% endfor %}
+        </div>
+    </div>
+</div>

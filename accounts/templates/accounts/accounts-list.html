@@ -12,18 +12,11 @@
 
 {% block content %}
 <div class="container-fluid mt-2 ">
-   <div class="card rounded-4 shadow-lg ms-2 me-2">
+   <div class="card rounded-4 shadow-lg mx-1">
        <div class="card-body">
-        <div class="card " >
-            <div class="card-body">
-                {% for account in all_accounts %}
-                    {% include "accounts/includes/credit-card.html" %}
-                {% endfor %}
-                
-              
-              
-            </div>
-          </div>
+            {% for account in all_accounts %}
+                {% include "accounts/includes/credit-card.html" %}
+            {% endfor %}
        </div>
    </div>
 </div>

@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-header">
+      <div class="row justify-content-between">
+        <div class="col-8 d-flex flex-row" ><p class="me-2">Actions</p>
+          <form class="actions_collapse collapse collapse-horizontal {% if actions_collapse %}show{% endif %}" action="{% url 'single-account-page' account.slug %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ actions_collapse }}" name="actions_collapse">
+            <button class="btn btn{% if actions_collapse == False %}-outline{% endif %}-warning py-1" type="submit"  ></button>
+          </form>
+        </div>
+        <div class="col-4 text-end"> 
+          
+            <button class="btn btn-outline-info py-1" type="button" data-bs-toggle="collapse" data-bs-target=".actions_collapse"></button>
+        </div>
+      </div>
+      
+    </div>
+    <div class="actions_collapse collapse {% if actions_collapse %}show{% endif %}" >
+      <div class="card-body">
+        <div class="row justify-content-center">
+          <div class="col-md-8 ">
+            <div class="row mb-3">
+              <div class="col-md-12 d-grid gap-2">
+                <a class="btn btn-primary" href="{% url 'edit-account-page' account.slug %}">Edit</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 d-grid gap-2">
+                <a class="btn btn-danger" href="{% url 'delete-account-page' account.slug %}">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
