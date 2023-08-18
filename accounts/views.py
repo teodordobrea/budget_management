@@ -1,18 +1,15 @@
 from typing import Any
-from django import http
 from django.db.models.query import QuerySet
-from django.forms.models import BaseModelForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -21,8 +18,16 @@ from .models import Account, AccountLogs
 
 import datetime
 from datetime import datetime
+from decimal import Decimal
+from currency_converter import CurrencyConverter
 
 # Create your views here.
+
+class Logging():
+    def __init__(self, created_at):
+        self.created_at = created_at
+        self.name = str(created_at.day) + str(created_at.month) + str(created_at.year)
+        self.logEntries = []
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     login_url = 'login-page'
@@ -82,8 +87,21 @@ class AccountsListView(LoginRequiredMixin, ListView):
 
     template_name = 'accounts/accounts-list.html'
     model = Account
-    #queryset = Account.objects.filter(owner= self.request.user)
+    
     context_object_name = 'all_accounts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        accounts = self.get_queryset()
+        ron_amount = sum([account.amount for account in accounts if account.curency.abbreviation=='RON'])
+        eur_amount = sum([account.amount for account in accounts if account.curency.abbreviation=='EUR'])
+        c = CurrencyConverter()
+        ron_amount = round(ron_amount + Decimal(round(c.convert(eur_amount, 'EUR', 'RON'),2)),2)
+        eur_amount = round(eur_amount + Decimal(round(c.convert(ron_amount, 'RON', 'EUR'),2)),2)
+        context['ron_amount'] = ron_amount
+        context['eur_amount'] = eur_amount
+        
+        return context
 
     def get_queryset(self) -> QuerySet[Any]:
         query_set = super().get_queryset()
@@ -146,6 +164,18 @@ class SingleAccountView(LoginRequiredMixin, View):
         logs = account.account_logs.all()
         dates = []
         amounts = []
+
+        logging_dates = [log.created_at.date() for log in logs]
+        logging_dates = set(logging_dates)
+        logging_dates = list(logging_dates)
+        logging_dates.sort()
+
+        loggings = [Logging(logging_date) for logging_date in logging_dates]
+        for logging in loggings:
+            logging.logEntries = logging.logEntries + [log for log in logs if logging.created_at == log.created_at.date()]
+
+
+
         for log in logs:
             dates.append(log.created_at.date().day)
             amounts.append(int(log.new_amount))
@@ -155,6 +185,7 @@ class SingleAccountView(LoginRequiredMixin, View):
             "logs": logs,
             "dates": dates,
             "amounts": amounts,  
+            "loggings": loggings,
             "actions_collapse": self.collapse_dictionary["actions_collapse"],  
             "graph_collapse": self.collapse_dictionary["graph_collapse"], 
             "logs_collapse": self.collapse_dictionary["logs_collapse"],         
@@ -179,7 +210,7 @@ class SingleAccountView(LoginRequiredMixin, View):
 
                 request.session[key] = collapse
         
-        return self.get(request,slug)
+        return HttpResponseRedirect(reverse('single-account-page', args = [slug]))
 
 class AddAccountView(LoginRequiredMixin, CreateView):
     login_url = 'login-page'

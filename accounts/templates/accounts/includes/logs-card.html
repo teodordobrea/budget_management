@@ -5,7 +5,7 @@
             <form class="logs_collapse collapse collapse-horizontal {% if logs_collapse %}show{% endif %}" action="{% url 'single-account-page' account.slug %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" value="{{ logs_collapse }}" name="logs_collapse">
-                <button class="btn btn{% if logs_collapse == False %}-outline{% endif %}-warning py-1" type="submit"  ></button>
+                <button class="btn btn{% if logs_collapse == False %}-outline{% endif %}-light py-1" type="submit"  ></button>
               </form>
         </div>
         <div class="col-4 text-end">
@@ -16,10 +16,32 @@
     </div>
     <div class="logs_collapse collapse {% if logs_collapse %}show{% endif %}">
         <div class="card-body">
-        {% for log in logs %}
-            {{ log.old_amount }}
-            {{ log.created_at }}
-        
+            
+
+
+
+        {% for logging in loggings %}
+            <div class="accordion " >
+                <h2 class="accordion-header ">
+                    <button class="accordion-button  collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ logging.name }}" aria-expanded="false">
+                        {{ logging.created_at }}
+                    </button>
+                </h2>
+                <div id="collapse_{{ logging.name }}" class="accordion-collapse  collapse">
+                    <div class="accordion-body">
+                        {% for log in logging.logEntries  %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ log.old_amount }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ log.new_amount }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         {% endfor %}
         </div>
     </div>

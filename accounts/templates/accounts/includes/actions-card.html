@@ -5,7 +5,7 @@
           <form class="actions_collapse collapse collapse-horizontal {% if actions_collapse %}show{% endif %}" action="{% url 'single-account-page' account.slug %}" method="POST">
             {% csrf_token %}
             <input type="hidden" value="{{ actions_collapse }}" name="actions_collapse">
-            <button class="btn btn{% if actions_collapse == False %}-outline{% endif %}-warning py-1" type="submit"  ></button>
+            <button class="btn btn{% if actions_collapse == False %}-outline{% endif %}-light py-1" type="submit"></button>
           </form>
         </div>
         <div class="col-4 text-end"> 

@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+    width: 10px;          
+ }
+ 
+ ::-webkit-scrollbar-thumb {   
+   border-radius: 30px;
+   background: -webkit-gradient(linear,left top,left bottom,from(var(--bs-danger)),to(var(--bs-info)));
+   
+ }
+ 
+ ::-webkit-scrollbar-track {     
+   background-color: #fff;
+   border-radius:10px;
+   background: var(--bs-dark);
+ }
