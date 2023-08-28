@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-i3^+i8ca2azt5fz-l=n5a1d&0j*8dv(budnf&v+se(wc_zqbv9
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '192.168.0.103',
     '192.168.0.109',
+    '192.168.1.8',
     '127.0.0.1'
 ]
 
@@ -42,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'bootstrap5',
 ]
 
 MIDDLEWARE = [
