@@ -1,4 +1,4 @@
-{% extends 'base-no-nav.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 
@@ -34,22 +34,7 @@
                                         </div>
                                   {% endfor %}
 
-                                  {% comment %} {% for error in form_field.errors%}
-                                    <div class="card border-danger text-danger position-fixed bottom-0 end-0" id="error">
-                                        <div class="card-header">
-                                            <div class="row justify-content-between">
-                                                <div class="col-md-8">
-                                                    Error
-                                                </div>
-                                                <div class="col-md-4 text-end">
-                                                    <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#error"></button>
-                                                </div>  
-                                        </div>
-                                        <div class="card-body">
-                                        <h5 class="card-title">{{error}}</h5>
-                                        </div>
-                                    </div>
-                                    {% endfor %} {% endcomment %}
+                                
                             </div>
                             {% endfor %}
                             <div class="d-grid gap-2">
