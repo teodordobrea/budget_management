@@ -9,20 +9,22 @@ This is a budget manangement website that was made with Django, HTML, CSS, Boots
 * View stats of their bank accounts
 
 ## Register page
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/6e96dca1-ed38-4bea-9348-1eb6ce4e999e)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/6418be34-b4cd-4544-bf6f-155cb400eb81)
 
 ## Login page
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/d8712765-46db-4831-9249-51800de3c5a6)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/69004746-5131-45e6-8fc2-436ed681f339)
 
 ## Home page
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/82f1a708-2b93-479c-8cf2-59302ebb5059)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/0cc1f27c-e7d3-4749-947e-88665a15c198)
 
 ## Add account page
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/e81f9ebe-076e-4d03-959c-eac8d7638b48)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/773e9a50-8998-4f7b-a273-629570b75d8f)
 
 ## Accounts list page
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/9f72c6f3-7810-42f6-8160-31cce6eaab4b)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/661308c6-16f0-48be-b8c9-62db99b76e30)
 
 ## Account details
-![image](https://github.com/teodordobrea/budget_management/assets/118021594/cd8c0746-e751-4345-afe5-81e0d23dac6d)
+![image](https://github.com/teodordobrea/budget_management/assets/118021594/e6a69cc9-2bca-4e4e-b802-8d260ac62075)
+
+
 
